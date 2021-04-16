@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np 
 import json
 
+
 class anime_database:
 
     def __init__(self):
-        self.data_loc = './animes.csv'
+        self.data_loc = '../animes.csv'
         self.anime_db = pd.read_csv(self.data_loc)
         self.features = self.anime_db.columns
         self.info_db = pd.DataFrame()

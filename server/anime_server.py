@@ -1,5 +1,12 @@
 import cherrypy
 import routes
+import os,sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+import OO_API
+
+from OO_API.anime_database import anime_database
 from anime_controller import AnimeController
 
 def start_service():

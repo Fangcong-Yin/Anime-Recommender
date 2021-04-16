@@ -1,5 +1,11 @@
 import unittest
-from anime_database import anime_database
+import sys,os
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+import OO_API
+
+from OO_API.anime_database import anime_database
 import json
 import requests
 
