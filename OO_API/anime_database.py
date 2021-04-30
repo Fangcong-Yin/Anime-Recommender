@@ -15,6 +15,7 @@ class anime_database:
     def prepare_data(self):
         #Info database only contains the factual information of an anime
         self.info_db = self.anime_db.iloc[:,0:6]
+        self.info_db['img_url'] = self.anime_db['img_url']
         self.info_db.drop_duplicates(keep='first',inplace=True)
         #Review database only contains the evaluation information of an anime
         self.review_db = self.anime_db.iloc[:,6:-2]
@@ -131,7 +132,11 @@ class anime_database:
                 ascending=True
             #score and members are ranked in descending order
             sorted_db.sort_values(by=[metric_name],ascending=ascending,inplace=True)
-            return_dict = sorted_db.to_dict(orient='index')
+            temp_dict = sorted_db.to_dict(orient='index')
+            i = 0
+            for k in temp_dict.keys():
+                return_dict[i] = temp_dict[k]
+                i+=1
         return return_dict
     #Add a new anime to the database
     def add_new_anime(self,anime_dict):
