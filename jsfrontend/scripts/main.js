@@ -14,38 +14,53 @@ function onLoad() {
     MakeAPICallToRanking('score');
 }
 
-//Load top 3 popular animes on the page
+//Load info of all animes and randomly select 3 animes from them
 function MakeAPICallToPopularAnimeInfo() {
-
-    var url = base_url + "info/title/";
-    //The names of the top 3 popular animes
-    var most_popular = ["Death Note", "Shingeki no Kyojin", "Sword Art Online"]
+    //Make an api call to get the info of all animes
+    var url = base_url + "info/";
     var i = 0;
-    most_popular.forEach((element) => {
-        //For each of the 3 animes, make an API call to get its information 
-        var xhr = new XMLHttpRequest();
-        var anime_url = url + element
-        xhr.open("GET", anime_url, true);
-        var jsonResponse;
 
-        xhr.onload = function(e) {
-            jsonResponse = JSON.parse(xhr.responseText);
-            console.log(jsonResponse["result"]);
+    var xhr = new XMLHttpRequest();
+    var anime_url = url;
+    xhr.open("GET", anime_url, true);
+    var jsonResponse;
 
-            var data = jsonResponse["data"];
-            console.log(data);
+    xhr.onload = function(e) {
+        jsonResponse = JSON.parse(xhr.responseText);
+        console.log(jsonResponse["result"]);
 
-            i += 1;
-            //After getting the response, update the UI by calling this function
-            updateMostPopularAnimes(i, data);
+        var data = jsonResponse["data"];
+        var data_length = Object.keys(data).length;
+        var keys = Object.keys(data);
+        var pre_index = 0;
+        var i = 1;
+        while (i <= 3) {
+            //Randomly select 3 animes from all
+            var index = parseInt(Math.random() * data_length);
+
+            if (index == pre_index) {
+                continue;
+            } else {
+                try {
+                    index = keys[index];
+                    //Update each of the 3 animes
+                    updateMostPopularAnimes(i, data[index.toString()]);
+                    i += 1
+                } catch (e) {
+                    console.log("Error updating popular animes" + e.toString());
+                    continue;
+                }
+
+            }
         }
 
-        xhr.onerror = function(e) {
-            console.error(xhr.statusText);
-        }
+    }
 
-        xhr.send(null);
-    });
+    xhr.onerror = function(e) {
+        console.error(xhr.statusText);
+    }
+
+    xhr.send(null);;
 
 
 }
@@ -54,7 +69,6 @@ function MakeAPICallToPopularAnimeInfo() {
 function updateMostPopularAnimes(index, data) {
     console.log(index);
 
-    for (var k in data) data = data[k];
     //Get the information of the anime to display on the UI
     var title = data["title"];
     var uid = data["uid"];

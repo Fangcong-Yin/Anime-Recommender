@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np 
 import json
-
+from sklearn.neighbors import NearestNeighbors
+import itertools
+from sklearn.preprocessing import MultiLabelBinarizer
 
 class anime_database:
 
@@ -22,11 +24,36 @@ class anime_database:
         self.review_db['uid'] = self.anime_db['uid']
         self.review_db['title'] = self.anime_db['title']
         self.review_db.drop_duplicates(keep='first',inplace=True)
+        #The following codes train a k nearest neighbor algorithm based on the genres of animes for anime recommendation
+        #Convert the genres to binary encoding first
+        genre_temp = self.info_db['genre'].copy()
+        genre_temp = genre_temp.str.replace('[','')
+        genre_temp = genre_temp.str.replace(']','')
+        genre_temp = genre_temp.str.replace('\'','')
+        genre_temp = genre_temp.str.split(', ',expand=False)
+        unique_genre = list(set(itertools.chain.from_iterable(genre_temp)))
+        for i in range(len(unique_genre)):
+            if unique_genre[i] == '':
+                unique_genre.remove(unique_genre[i])
+                break
+        mlb = MultiLabelBinarizer()
+        mlb_genre = mlb.fit_transform(genre_temp)
+        genre_labels = ['Genre_'+x for x in mlb.classes_]
+        self.info_db = self.info_db.join(pd.DataFrame(mlb_genre, columns=genre_labels, index=self.info_db.index))
+        #Run KNN algorithm and store the model to this object
+        self.knn_model  = NearestNeighbors(n_neighbors=10, radius=1)
+        self.genreDf  = pd.DataFrame(mlb_genre, columns=genre_labels, index=self.info_db.index)
+        #Fit the model on the genre data
+        self.knn_model.fit(self.genreDf)
+        
+        
     def get_info_by_feature(self,feature_name,feature_value):
         return_dict = dict()
         #If no features are entered, output information of all animes
         if(feature_name==None):
+            self.info_db.replace(np.NaN,'',inplace=True)
             return_dict = self.info_db.to_dict(orient='index')
+
         elif(feature_name in list(self.info_db)):
             #If filter by genre, call the helper function
             if(feature_name=='genre'):
@@ -151,8 +178,26 @@ class anime_database:
             self.info_db.loc[self.info_db[self.info_db['uid']==uid].index,update_feature] = update_value
         if update_feature in self.review_db.columns:
             self.review_db.loc[self.review_db[self.review_db['uid']==uid].index,update_feature] = update_value
+    #Get recommended animes for a given anime by its uid
+    def get_rec_anime(self,anime_uid):
+
+        anime_index = self.info_db.index[self.info_db["uid"]==int(anime_uid)]
+        #Get 10 similar animes (neighbors) for the given anime using the knn model 
+        neighbors = self.knn_model.kneighbors(self.genreDf.loc[anime_index].to_numpy().reshape(1,-1), 10, return_distance=False)
+        rec_uid_list = list()
+        for i in neighbors[0]:
+            try:
+                this_t = self.info_db.loc[i]['title']
+                orig_t = list(self.info_db.loc[anime_index]['title'])[0]
+                if(this_t!=orig_t and orig_t not in this_t):
+                    rec_uid_list.append(this_t)
+            except:
+                continue
+        #Return the title of all valid recommended animes
+        return rec_uid_list
 
 if __name__=='__main__':
     ad = anime_database()
     ad.prepare_data()
+    print(ad.get_rec_anime('34599'))
     

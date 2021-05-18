@@ -27,6 +27,9 @@ def start_service():
     dispatcher.connect('delete an existing anime', '/anime/info/:uid', controller=ac, action = 'DELETE_INFO', conditions=dict(method=['DELETE']))
     dispatcher.connect('reset data', '/anime/reset/', controller=ac, action = 'RESET', conditions=dict(method=['PUT']))
 
+    dispatcher.connect('recommendation', '/anime/rec/:anime_uid',controller=ac, action = 'GET_REC_ANIMES', conditions=dict(method=['GET']))
+
+
     dispatcher.connect('title option', '/anime/info/title/:title', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
     dispatcher.connect('keyword option', '/anime/info/keyword/:keyword', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
     dispatcher.connect('genre option', '/anime/info/genre/:genre', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
@@ -38,7 +41,7 @@ def start_service():
     dispatcher.connect('ranking option', '/anime/review/ranking/:metric', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
     dispatcher.connect('delete option', '/anime/info/:uid', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
     dispatcher.connect('reset option', '/anime/reset/', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
-
+    dispatcher.connect('recommendation option', '/anime/rec/:anime_uid', controller=optionsController, action='OPTIONS', conditions=dict(method=['OPTIONS']))
 
     conf = {
         'global' : {

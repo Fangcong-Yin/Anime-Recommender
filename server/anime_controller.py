@@ -155,9 +155,19 @@ class AnimeController(object):
             output['message'] = str(ex)
         return json.dumps(output)
         
-
+    def GET_REC_ANIMES(self,anime_uid):
+        output = dict()
+        try:
+            output['data'] = [str(uid) for uid in self.adb.get_rec_anime(anime_uid)]
+            output['result'] = 'success'
+        except Exception as ex:
+            output['result'] = 'error'
+            output['message'] = str(ex)
+        
+        return json.dumps(output)
 if __name__=='__main__':
     ac = AnimeController()
     print(ac.GET_REVIEW_BY_UID(28891))
-    print(ac.UPDATE_REVIEW(28891))
+    #print(ac.UPDATE_REVIEW(28891))
     print(ac.GET_REVIEW_BY_UID(28891))
+    print(ac.GET_REC_ANIMES(28891))
