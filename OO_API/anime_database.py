@@ -25,6 +25,8 @@ class anime_database:
         self.review_db['title'] = self.anime_db['title']
         self.review_db.drop_duplicates(keep='first',inplace=True)
         #The following codes train a k nearest neighbor algorithm based on the genres of animes for anime recommendation
+        #This algorithm is one of the basic algorithms for rec systems, so it is implemented here
+        #Reference: https://www.datacamp.com/community/tutorials/k-nearest-neighbor-classification-scikit-learn
         #Convert the genres to binary encoding first
         genre_temp = self.info_db['genre'].copy()
         genre_temp = genre_temp.str.replace('[','')

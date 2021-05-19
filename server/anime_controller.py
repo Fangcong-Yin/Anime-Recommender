@@ -14,7 +14,7 @@ class AnimeController(object):
         self.adb = anime_database()
         self.adb.prepare_data()
     
-
+#Get information of all animes
     def GET_ALL_INFO(self):
         output = dict()
         try:
@@ -25,6 +25,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get anime info by anime title
     def GET_INFO_BY_TITLE(self,title):
         output = dict()
         try:
@@ -35,6 +36,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get anime information by a keyword
     def GET_INFO_BY_KEYWORD(self,keyword):
         output = dict()
         try:
@@ -45,6 +47,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get anime information by genre
     def GET_INFO_BY_GENRE(self,genre):
         output = dict()
         try:
@@ -55,6 +58,7 @@ class AnimeController(object):
             output['message'] = str(ex)
 
         return json.dumps(output)
+#Get anime information by the year of aired
     def GET_INFO_BY_YEAR(self,year):
         
         output = dict()
@@ -69,6 +73,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get anime information by the number of episodes
     def GET_INFO_BY_LENGTH(self,length):
         
         output = dict()
@@ -81,6 +86,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get review data by the uid of an anime
     def GET_REVIEW_BY_UID(self,uid):
         output = dict()
         try:
@@ -92,6 +98,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get review data of all animes
     def GET_ALL_REVIEW(self):
         output = dict()
         try:
@@ -103,6 +110,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Get ranking list by a given metric
     def GET_RANKING(self,metric):
         output = dict()
         try:
@@ -113,6 +121,7 @@ class AnimeController(object):
             output['message'] = str(ex)
         
         return json.dumps(output)
+#Update review data for a given anime by its uid
     def UPDATE_REVIEW(self,uid):
         output = dict()
         input_data = json.loads(cherrypy.request.body.read().decode('utf-8'))
@@ -125,6 +134,7 @@ class AnimeController(object):
             output['result'] = 'error'
             output['message'] = str(ex)
         return json.dumps(output)
+#Delete an anime from the database
     def DELETE_INFO(self,uid):
         output = dict()
         try:
@@ -135,6 +145,7 @@ class AnimeController(object):
             output['result'] = 'error'
             output['message'] = str(ex)
         return json.dumps(output)
+#Add an anime to the database
     def ADD_INFO(self,title):
         output = dict()
         input_data = json.loads(cherrypy.request.body.read().decode('utf-8'))
@@ -145,6 +156,7 @@ class AnimeController(object):
             output['result'] = 'error'
             output['message'] = str(ex)
         return json.dumps(output)
+#Reset the database
     def RESET(self):
         output = dict()
         try:
@@ -154,7 +166,7 @@ class AnimeController(object):
             output['result'] = 'error'
             output['message'] = str(ex)
         return json.dumps(output)
-        
+#Get recommendation animes for a given anime by its uid  
     def GET_REC_ANIMES(self,anime_uid):
         output = dict()
         try:
