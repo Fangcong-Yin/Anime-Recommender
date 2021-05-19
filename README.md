@@ -6,13 +6,13 @@ The project consists of a OO_API library that provides supporting functions for 
 
 ## DEMO
 
-Video Demo:  
+Video Demo:  https://drive.google.com/file/d/14x-0JB-reFwGhMmTFHw7J4WPalnzkCM-/view?usp=sharing
 
-Code Walkthrough:  
+Code Walkthrough:  https://drive.google.com/file/d/1bxRHGJBqrCymgcS8NZBXple0Ii5w_NOK/view?usp=sharing
 
 Demo website (please run the server on localhost before opening the website): https://fangcong-yin.github.io/AnimeRecommender/index.html  
 
-Presentation slides:  
+Presentation slides:  https://docs.google.com/presentation/d/1wGSln6kI-ipKy__FZt4qnqiLOhQJ79JJAQZimLSBiE8/edit?usp=sharing
 
 ## OO_API
 
